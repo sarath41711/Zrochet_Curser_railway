@@ -5,12 +5,10 @@
   const navToggle = document.getElementById("navToggle");
   const navMenu = document.getElementById("navMenu");
   const navLinks = document.querySelectorAll(".nav-link");
-  const cartCount = document.getElementById("cartCount");
   const toast = document.getElementById("toast");
   const newsletterForm = document.getElementById("newsletterForm");
   const newsletterMsg = document.getElementById("newsletterMsg");
 
-  let cartItems = 0;
   let toastTimer;
 
   /* Sticky navbar scroll effect */
@@ -21,19 +19,28 @@
 
   /* Highlight active nav link based on scroll position */
   function updateActiveNavLink() {
-    const sections = document.querySelectorAll("section[id], footer[id]");
-    const scrollPos = window.scrollY + 100;
+    const tracked = [
+      { id: "home", link: "home" },
+      { id: "collections", link: "collections" },
+      { id: "shop", link: "shop" },
+      { id: "side-bags", link: "shop" },
+      { id: "handle-bags", link: "shop" },
+      { id: "about", link: "about" },
+      { id: "contact", link: "contact" },
+    ];
 
-    sections.forEach(function (section) {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute("id");
+    const scrollPos = window.scrollY + 120;
+    let activeLink = "home";
 
-      if (scrollPos >= top && scrollPos < top + height) {
-        navLinks.forEach(function (link) {
-          link.classList.toggle("active", link.getAttribute("href") === "#" + id);
-        });
+    tracked.forEach(function (item) {
+      const section = document.getElementById(item.id);
+      if (section && scrollPos >= section.offsetTop) {
+        activeLink = item.link;
       }
+    });
+
+    navLinks.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + activeLink);
     });
   }
 
@@ -61,15 +68,8 @@
       const card = btn.closest(".product-card");
       const name = card.dataset.name;
 
-      cartItems += 1;
-      cartCount.textContent = cartItems;
-      cartCount.classList.remove("bump");
-      void cartCount.offsetWidth;
-      cartCount.classList.add("bump");
-
       card.classList.add("added");
       btn.textContent = "Added ✓";
-
       showToast(name + " added to cart");
 
       setTimeout(function () {

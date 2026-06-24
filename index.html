@@ -16,12 +16,6 @@
     <div class="container navbar__inner">
       <a href="#" class="navbar__logo">Zrochet</a>
 
-      <button class="navbar__toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
       <nav class="navbar__nav" id="navMenu">
         <a href="#home" class="nav-link active">Home</a>
         <a href="#shop" class="nav-link">Shop</a>
@@ -30,13 +24,10 @@
         <a href="#contact" class="nav-link">Contact</a>
       </nav>
 
-      <button class="navbar__cart" id="cartBtn" aria-label="Shopping cart">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-        <span class="cart-count" id="cartCount">0</span>
+      <button class="navbar__toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </header>
@@ -57,7 +48,7 @@
         <div class="hero__image fade-in">
           <div class="hero__image-frame">
             <img
-              src="https://images.unsplash.com/photo-1591561954557-26941168b49e?w=800&q=80"
+              src="images/welcome.png"
               alt="Handcrafted crochet handbag in warm neutral tones"
               loading="eager"
             >
@@ -91,14 +82,6 @@
             </div>
           </a>
           <a href="#shop" class="category-card fade-in">
-            <img src="https://images.unsplash.com/photo-1591561954557-26941168b49e?w=600&q=80" alt="Everyday Grace Classic Bag">
-            <div class="category-card__overlay">
-              <h3>Everyday Classic Bag</h3>
-              <p class="category-card__price">₹1,000</p>
-              <span>Shop now →</span>
-            </div>
-          </a>
-          <a href="#shop" class="category-card fade-in">
             <img src="https://images.unsplash.com/photo-1615886315156-58a204a488d6?w=600&q=80" alt="Oreo Swirl Signature Bag">
             <div class="category-card__overlay">
               <h3>Oreo Signature Bag</h3>
@@ -107,7 +90,7 @@
             </div>
           </a>
           <a href="#shop" class="category-card fade-in">
-            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80" alt="Artisan Top-Handle Bag">
+            <img src="images/B9_handle (1).png" alt="Artisan Top-Handle Bag">
             <div class="category-card__overlay">
               <h3>Handle Bag</h3>
               <p class="category-card__price">₹650</p>
@@ -115,7 +98,7 @@
             </div>
           </a>
           <a href="#shop" class="category-card fade-in">
-            <img src="https://images.unsplash.com/photo-1558171815-e695e51ab501?w=600&q=80" alt="Chic Urban Side Sling">
+            <img src="images/B7_side (1).png" alt="Chic Urban Side Sling">
             <div class="category-card__overlay">
               <h3>Side bag</h3>
               <p class="category-card__price">₹850</p>
@@ -214,14 +197,95 @@
             </div>
           </article>
 
-          <article class="product-card fade-in" data-id="8" data-name="Charm Keychain Duo" data-price="24">
+          <article class="product-card fade-in" data-id="B7" data-name="Chic Urban Side Sling" data-price="850">
             <div class="product-card__image">
-              <img src="https://images.unsplash.com/photo-1558171815-e695e51ab501?w=500&q=80" alt="Charm Keychain Duo">
-              <span class="product-card__badge">Limited</span>
+              <img src="images/B7_side (1).png" alt="Chic Urban Side Sling">
+              <span class="product-card__badge">New</span>
             </div>
             <div class="product-card__body">
-              <h3 class="product-card__name">Charm Keychain Duo</h3>
-              <p class="product-card__price">$24.00</p>
+              <h3 class="product-card__name">Chic Urban Side Sling</h3>
+              <p class="product-card__price">₹850</p>
+              <button class="btn btn--secondary add-to-cart">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="product-card fade-in" data-id="B8" data-name="Blush Side Crossbody" data-price="850">
+            <div class="product-card__image">
+              <img src="images/B8_side.png" alt="Blush Side Crossbody">
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Blush Side Crossbody</h3>
+              <p class="product-card__price">₹850</p>
+              <button class="btn btn--secondary add-to-cart">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="product-card fade-in" data-id="B9" data-name="Artisan Top-Handle Bag" data-price="650">
+            <div class="product-card__image">
+              <img src="images/B9_handle (1).png" alt="Artisan Top-Handle Bag">
+              <span class="product-card__badge">Bestseller</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Artisan Top-Handle Bag</h3>
+              <p class="product-card__price">₹650</p>
+              <button class="btn btn--secondary add-to-cart">Add to Cart</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Side Bag Collection -->
+    <section class="collection-spotlight section" id="side-bags">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Side Bag Collection</span>
+          <h2 class="section-title">Chic Urban Side Slings</h2>
+          <p class="section-desc">Hands-free crochet crossbodies designed for everyday ease — lightweight, stylish, and uniquely yours.</p>
+        </div>
+        <div class="products__grid">
+          <article class="product-card fade-in" data-id="B7" data-name="Chic Urban Side Sling" data-price="850">
+            <div class="product-card__image">
+              <img src="images/B7_side (1).png" alt="Chic Urban Side Sling — Warm Tan">
+              <span class="product-card__badge">2 Views</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Chic Urban Side Sling</h3>
+              <p class="product-card__price">₹850</p>
+              <button class="btn btn--secondary add-to-cart">Add to Cart</button>
+            </div>
+          </article>
+          <article class="product-card fade-in" data-id="B8" data-name="Blush Side Crossbody" data-price="850">
+            <div class="product-card__image">
+              <img src="images/B8_side.png" alt="Blush Side Crossbody">
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Blush Side Crossbody</h3>
+              <p class="product-card__price">₹850</p>
+              <button class="btn btn--secondary add-to-cart">Add to Cart</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Handle Bag Collection -->
+    <section class="collection-spotlight section collection-spotlight--alt" id="handle-bags">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Handle Bag Collection</span>
+          <h2 class="section-title">Artisan Top-Handle Bags</h2>
+          <p class="section-desc">Structured crochet carryalls with elegant top handles — refined enough for brunch, practical enough for every day.</p>
+        </div>
+        <div class="products__grid products__grid--single">
+          <article class="product-card fade-in" data-id="B9" data-name="Artisan Top-Handle Bag" data-price="650">
+            <div class="product-card__image">
+              <img src="images/B9_handle (1).png" alt="Artisan Top-Handle Bag">
+              <span class="product-card__badge">Bestseller</span>
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__name">Artisan Top-Handle Bag</h3>
+              <p class="product-card__price">₹650</p>
               <button class="btn btn--secondary add-to-cart">Add to Cart</button>
             </div>
           </article>
@@ -336,8 +400,8 @@
               </svg>
             </span>
           </a>
-          <a href="#" class="gallery__item fade-in" aria-label="Instagram post 4">
-            <img src="https://images.unsplash.com/photo-1456324504439-367cee43d842?w=400&q=80" alt="Yarn and crochet tools" loading="lazy">
+          <a href="#" class="gallery__item fade-in" aria-label="Side sling bag">
+            <img src="images/B7_side (2).png" alt="Chic Urban Side Sling detail" loading="lazy">
             <span class="gallery__overlay">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
@@ -346,8 +410,8 @@
               </svg>
             </span>
           </a>
-          <a href="#" class="gallery__item fade-in" aria-label="Instagram post 5">
-            <img src="https://images.unsplash.com/photo-1615886315156-58a204a488d6?w=400&q=80" alt="Market bag styling" loading="lazy">
+          <a href="#" class="gallery__item fade-in" aria-label="Blush side crossbody">
+            <img src="images/B8_side.png" alt="Blush Side Crossbody" loading="lazy">
             <span class="gallery__overlay">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
@@ -356,8 +420,8 @@
               </svg>
             </span>
           </a>
-          <a href="#" class="gallery__item fade-in" aria-label="Instagram post 6">
-            <img src="https://images.unsplash.com/photo-1558171815-e695e51ab501?w=400&q=80" alt="Artisan at work" loading="lazy">
+          <a href="#" class="gallery__item fade-in" aria-label="Top-handle bag">
+            <img src="images/B9_handle (2).png" alt="Artisan Top-Handle Bag" loading="lazy">
             <span class="gallery__overlay">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
