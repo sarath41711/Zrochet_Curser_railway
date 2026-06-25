@@ -1,28 +1,17 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
-import {
-  getCategory,
-  getProductsByCategory,
-} from "@/lib/catalog";
+import { getCategory, getProductsByCategory } from "@/lib/catalog";
+
+export const dynamic = "force-dynamic";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
 }
 
-export function generateStaticParams() {
-  return [
-    { category: "mini-bags" },
-    { category: "party-bags" },
-    { category: "oreo-bags" },
-    { category: "side-bags" },
-    { category: "handle-bags" },
-  ];
-}
-
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { category: slug } = await params;
-  const category = getCategory(slug);
+  const category = await getCategory(slug);
   if (!category) return { title: "Collection — Zrochet" };
   return {
     title: category.name + " — Zrochet",
@@ -32,10 +21,10 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: slug } = await params;
-  const category = getCategory(slug);
+  const category = await getCategory(slug);
   if (!category) notFound();
 
-  const products = getProductsByCategory(slug);
+  const products = await getProductsByCategory(slug);
 
   return (
     <div className="pt-24 pb-16">
@@ -62,9 +51,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {products.length === 0 ? (
           <div className="rounded-2xl border border-sand bg-white py-16 text-center">
             <p className="text-text-muted">No products found in this collection yet.</p>
-            <p className="mt-2 text-sm text-text-muted">
-              Add images to the images folder and run npm run generate:catalog
-            </p>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

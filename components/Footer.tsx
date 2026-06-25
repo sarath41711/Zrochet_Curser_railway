@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/catalog";
 
-export default function Footer() {
+export default async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer id="contact" className="border-t border-sand bg-beige py-12 lg:py-16">
       <div className="mx-auto max-w-6xl px-5">
@@ -10,7 +13,7 @@ export default function Footer() {
               Zrochet
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-text-muted">
-              Handcrafted crochet creations made with love, patience, and a touch of magic.
+              {settings.footerText}
             </p>
           </div>
 
@@ -28,9 +31,9 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-lg font-semibold text-brown-dark">Contact</h3>
             <ul className="mt-4 space-y-2 text-sm text-text-muted">
-              <li>hello@zrochet.com</li>
-              <li>+1 (555) 123-4567</li>
-              <li>123 Artisan Lane<br />Portland, OR 97201</li>
+              <li>{settings.email}</li>
+              <li>{settings.phone}</li>
+              <li style={{ whiteSpace: "pre-line" }}>{settings.address}</li>
             </ul>
           </div>
         </div>

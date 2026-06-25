@@ -9,21 +9,15 @@ import {
   getRelatedProducts,
 } from "@/lib/catalog";
 
+export const dynamic = "force-dynamic";
+
 interface ProductPageProps {
   params: Promise<{ category: string; id: string }>;
 }
 
-export async function generateStaticParams() {
-  const { getCatalog } = await import("@/lib/catalog");
-  return getCatalog().products.map((p) => ({
-    category: p.category,
-    id: p.id,
-  }));
-}
-
 export async function generateMetadata({ params }: ProductPageProps) {
   const { category, id } = await params;
-  const product = getProduct(category, id);
+  const product = await getProduct(category, id);
   if (!product) return { title: "Product — Zrochet" };
   return {
     title: product.name + " — Zrochet",
@@ -33,12 +27,12 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { category: slug, id } = await params;
-  const category = getCategory(slug);
-  const product = getProduct(slug, id);
+  const category = await getCategory(slug);
+  const product = await getProduct(slug, id);
 
   if (!category || !product) notFound();
 
-  const related = getRelatedProducts(product);
+  const related = await getRelatedProducts(product);
 
   return (
     <div className="pt-24 pb-16 animate-fade-up">

@@ -2,16 +2,21 @@
   "name": "zrochet-web",
   "private": true,
   "scripts": {
-    "dev": "npm run generate:catalog && next dev",
+    "dev": "prisma generate && npm run generate:catalog && next dev",
     "dev:clean": "node scripts/clean-next.js && npm run dev",
-    "build": "npm run generate:catalog && next build",
-    "start": "next start",
+    "build": "prisma generate && prisma migrate deploy && npm run generate:catalog && next build",
+    "start": "prisma migrate deploy && next start",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "generate:catalog": "node scripts/generate-catalog.js",
     "generate:minibags": "node scripts/generate-catalog.js",
-    "watch:minibags": "node scripts/watch-minibag-catalog.js"
+    "watch:minibags": "node scripts/watch-minibag-catalog.js",
+    "db:seed": "node scripts/seed-database.js",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.0",
     "next": "^15.3.3",
     "qrcode": "^1.5.4",
     "react": "^19.1.0",
@@ -23,6 +28,7 @@
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
+    "prisma": "^6.19.0",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3"
   }

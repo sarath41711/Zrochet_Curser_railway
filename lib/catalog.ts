@@ -1,6 +1,17 @@
 import catalogData from "@/data/catalog.json";
 import { TEST_BAG_PRODUCTS } from "./test-product";
+import {
+  fetchCatalogFromDb,
+  fetchCategoryFromDb,
+  fetchProductFromDb,
+  fetchProductsByCategoryFromDb,
+  fetchSiteSettings,
+  type SiteSettingsData,
+} from "./catalog-db";
+import { isDatabaseConfigured } from "./prisma";
 import type { Catalog, Product, Category, ProductMedia } from "./types";
+
+export type { SiteSettingsData };
 
 type RawProduct = Product & { images?: string[] };
 
@@ -34,37 +45,87 @@ const missingTestProducts = TEST_BAG_PRODUCTS.filter(
     )
 );
 
-const catalog: Catalog = {
+const jsonCatalog: Catalog = {
   ...baseCatalog,
   products: [...baseProducts, ...missingTestProducts],
 };
 
-export function getCatalog(): Catalog {
-  return catalog;
+function mergeTestProducts(catalog: Catalog): Catalog {
+  const missing = TEST_BAG_PRODUCTS.filter(
+    (test) =>
+      !catalog.products.some(
+        (p) => p.category === test.category && p.id.toUpperCase() === test.id.toUpperCase()
+      )
+  );
+  if (!missing.length) return catalog;
+  return { ...catalog, products: [...catalog.products, ...missing] };
 }
 
-export function getCategories(): Category[] {
+async function resolveCatalog(): Promise<Catalog> {
+  if (isDatabaseConfigured()) {
+    const dbCatalog = await fetchCatalogFromDb();
+    if (dbCatalog) return mergeTestProducts(dbCatalog);
+  }
+  return jsonCatalog;
+}
+
+export async function getCatalog(): Promise<Catalog> {
+  return resolveCatalog();
+}
+
+export async function getCategories(): Promise<Category[]> {
+  const catalog = await resolveCatalog();
   return catalog.categories;
 }
 
-export function getCategory(slug: string): Category | undefined {
-  return catalog.categories.find((c) => c.slug === slug);
+export async function getCategory(slug: string): Promise<Category | undefined> {
+  if (isDatabaseConfigured()) {
+    const cat = await fetchCategoryFromDb(slug);
+    if (cat) return cat;
+  }
+  return jsonCatalog.categories.find((c) => c.slug === slug);
 }
 
-export function getProductsByCategory(categorySlug: string): Product[] {
-  return catalog.products.filter((p) => p.category === categorySlug);
+export async function getProductsByCategory(categorySlug: string): Promise<Product[]> {
+  if (isDatabaseConfigured()) {
+    const products = await fetchProductsByCategoryFromDb(categorySlug);
+    if (products.length) return products;
+  }
+  return jsonCatalog.products.filter((p) => p.category === categorySlug);
 }
 
-export function getProduct(categorySlug: string, id: string): Product | undefined {
-  return catalog.products.find(
+export async function getProduct(
+  categorySlug: string,
+  id: string
+): Promise<Product | undefined> {
+  if (isDatabaseConfigured()) {
+    const product = await fetchProductFromDb(categorySlug, id);
+    if (product) return product;
+  }
+  return jsonCatalog.products.find(
     (p) => p.category === categorySlug && p.id.toUpperCase() === id.toUpperCase()
   );
 }
 
-export function getRelatedProducts(product: Product, limit = 4): Product[] {
+export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
+  const catalog = await resolveCatalog();
   return catalog.products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, limit);
+}
+
+export async function getSiteSettings(): Promise<SiteSettingsData> {
+  if (isDatabaseConfigured()) {
+    return fetchSiteSettings();
+  }
+  return {
+    email: "hello@zrochet.com",
+    phone: "+91 98765 43210",
+    address: "123 Artisan Lane, India",
+    footerText:
+      "Handcrafted crochet creations made with love, patience, and a touch of magic.",
+    heroImage: "/images/welcome.png",
+  };
 }
 
 export function getCoverImage(product: Product): string {

@@ -5,6 +5,7 @@ import {
   getCatalog,
   getCoverImage,
   getProduct,
+  getSiteSettings,
 } from "@/lib/catalog";
 
 const COLLECTION_ITEMS = [
@@ -15,12 +16,16 @@ const COLLECTION_ITEMS = [
   { title: "Side Bag", price: 850, slug: "side-bags", productId: "B7" },
 ];
 
-export default function HomePageContent() {
-  const products = getCatalog().products;
+export default async function HomePageContent() {
+  const [catalog, settings] = await Promise.all([getCatalog(), getSiteSettings()]);
+  const products = catalog.products;
+  const collectionProducts = await Promise.all(
+    COLLECTION_ITEMS.map((item) => getProduct(item.slug, item.productId))
+  );
+  const heroProduct = (await getProduct("oreo-bags", "B5")) ?? products[0];
 
   return (
     <>
-      {/* Home */}
       <section id="home" className="bg-gradient-to-b from-beige to-cream pt-28 pb-16 lg:pb-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-2 lg:gap-14">
           <div>
@@ -43,8 +48,8 @@ export default function HomePageContent() {
           </div>
           <div className="overflow-hidden rounded-2xl luxury-shadow-lg">
             <Image
-              src="/images/welcome.png"
-              alt="Zrochet handcrafted crochet bag with gold chain strap"
+              src={settings.heroImage}
+              alt="Zrochet handcrafted crochet bag"
               width={800}
               height={1000}
               className="aspect-[4/5] w-full object-cover"
@@ -54,7 +59,6 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* Collections */}
       <section id="collections" className="bg-white py-16 lg:py-20">
         <div className="mx-auto max-w-6xl px-5">
           <div className="mb-10 text-center">
@@ -66,9 +70,9 @@ export default function HomePageContent() {
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-5">
-            {COLLECTION_ITEMS.map((item) => {
-              const product = getProduct(item.slug, item.productId);
-              const image = product ? getCoverImage(product) : "/images/B1_minibag%20(1).png";
+            {COLLECTION_ITEMS.map((item, index) => {
+              const product = collectionProducts[index];
+              const image = product ? getCoverImage(product) : settings.heroImage;
 
               return (
                 <Link
@@ -99,7 +103,6 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* Shop */}
       <section id="shop" className="bg-cream py-16 lg:py-20">
         <div className="mx-auto max-w-6xl px-5">
           <div className="mb-10 text-center">
@@ -121,12 +124,11 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* About */}
       <section id="about" className="bg-beige py-16 lg:py-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-2 lg:gap-16">
           <div className="overflow-hidden rounded-2xl luxury-shadow-md">
             <Image
-              src={getCoverImage(getProduct("oreo-bags", "B5") ?? products[0])}
+              src={getCoverImage(heroProduct)}
               alt="Artisan crafting crochet by hand"
               width={700}
               height={525}
@@ -163,7 +165,6 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="bg-white py-16 lg:py-20">
         <div className="mx-auto max-w-6xl px-5">
           <div className="mb-10 text-center">
@@ -185,8 +186,7 @@ export default function HomePageContent() {
                 name: "Sophia M.",
               },
               {
-                quote:
-                  "Quality beyond expectations. Zrochet has a customer for life!",
+                quote: "Quality beyond expectations. Zrochet has a customer for life!",
                 name: "Danielle K.",
               },
             ].map((item) => (
@@ -208,7 +208,6 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* Newsletter */}
       <section className="bg-brown-dark py-16 text-white lg:py-20">
         <div className="mx-auto max-w-xl px-5 text-center">
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-gold">Stay Connected</p>

@@ -82,21 +82,33 @@ export default function CheckoutPageContent() {
 
 
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-
-
     if (paymentMethod === "card") {
-
       alert("Card payments are not available yet. Please use GPay / UPI for now.");
-
       return;
-
     }
 
+    const form = new FormData(e.currentTarget);
 
+    try {
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: String(form.get("name")),
+          email: String(form.get("email")),
+          phone: String(form.get("phone")),
+          address: String(form.get("address")),
+          items,
+          subtotal,
+          currency,
+        }),
+      });
+    } catch {
+      // Continue to payment even if order logging fails
+    }
 
     const orderId = generateOrderId();
 
