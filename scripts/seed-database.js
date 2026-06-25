@@ -26,6 +26,14 @@ async function main() {
     process.exit(1);
   }
 
+  const existingProducts = await prisma.product.count();
+  if (existingProducts > 0) {
+    console.log(
+      `Database already has ${existingProducts} product(s). Skipping seed.`
+    );
+    return;
+  }
+
   const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 
   console.log("Seeding collections...");

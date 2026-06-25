@@ -60,11 +60,16 @@ This creates:
 
 ## Build process
 
-`npm run build` automatically:
+`npm run build` runs on Railway during the **build** phase (no database access):
 1. Generates Prisma client
-2. Runs database migrations (`prisma migrate deploy`)
-3. Generates catalog JSON (fallback)
-4. Builds Next.js
+2. Generates catalog JSON (fallback)
+3. Builds Next.js
+
+**Pre-deploy** (via `railway.toml`) runs when the database is reachable:
+1. `npx prisma migrate deploy` — creates tables
+2. `npm run db:seed` — imports products (skips if DB already has products)
+
+You can also run `npm run db:seed` manually in Railway **Console**.
 
 ## Security notes
 
