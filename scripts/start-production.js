@@ -10,11 +10,19 @@ function run(cmd) {
   execSync(cmd, { stdio: "inherit" });
 }
 
-if (process.env.DATABASE_URL) {
+function isDatabaseConfigured() {
+  const url = (process.env.DATABASE_URL || "").trim();
+  if (!url) return false;
+  if (url.includes("PASSWORD@HOST") || url.includes("@HOST:")) return false;
+  if (url.includes("postgres.railway.internal")) return false;
+  return url.startsWith("postgresql://") || url.startsWith("postgres://");
+}
+
+if (isDatabaseConfigured()) {
   run("npx prisma migrate deploy");
   run("npm run db:seed");
 } else {
-  console.log("DATABASE_URL not set — skipping migrate and seed.");
+  console.log("DATABASE_URL not configured — skipping migrate and seed.");
 }
 
 run("npx next start");

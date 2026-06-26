@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { getSiteUrl } from "@/lib/env";
 
 function isEmailConfigured(): boolean {
   return Boolean(
@@ -34,7 +35,7 @@ export async function sendThankYouEmail(options: {
   }
 
   const from = process.env.SMTP_FROM || process.env.SMTP_USER || "hello@zrochet.com";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = getSiteUrl();
   const amount =
     options.currency === "INR"
       ? "₹" + options.subtotal.toLocaleString("en-IN")

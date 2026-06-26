@@ -48,15 +48,20 @@ This creates:
 
 ## Local development
 
-1. Copy `.env.example` to `.env.local`
-2. Use Railway **public** database URL (not `postgres.railway.internal`)
-3. Run:
+1. Copy `.env.example` to `.env.local` (already done if you have `.env.local`)
+2. Set `NEXT_PUBLIC_SITE_URL=http://localhost:3000` and `ADMIN_PASSWORD`
+3. Add Railway **public** `DATABASE_URL` (not `postgres.railway.internal`)
+4. Run:
    ```bash
    npm install
-   npm run db:migrate
-   npm run db:seed
+   npm run setup:local
    npm run dev
    ```
+5. Open:
+   - Store: http://localhost:3000
+   - Admin: http://localhost:3000/admin/login (password from `ADMIN_PASSWORD`)
+
+Without a valid `DATABASE_URL`, the store uses `catalog.json`; admin DB features need the public Postgres URL.
 
 ## Build process
 

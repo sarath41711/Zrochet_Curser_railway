@@ -21,8 +21,15 @@ const COLLECTION_PATTERNS = {
 };
 
 async function main() {
-  if (!process.env.DATABASE_URL) {
-    console.error("DATABASE_URL is not set. Add it to .env or Railway variables.");
+  const dbUrl = (process.env.DATABASE_URL || "").trim();
+  if (
+    !dbUrl ||
+    dbUrl.includes("PASSWORD@HOST") ||
+    dbUrl.includes("postgres.railway.internal")
+  ) {
+    console.error(
+      "DATABASE_URL is not set or invalid. Use Railway PUBLIC URL in .env.local for local dev."
+    );
     process.exit(1);
   }
 
