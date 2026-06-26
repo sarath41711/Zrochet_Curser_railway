@@ -9,10 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { formatCartPrice } from "@/lib/cart";
-
 import { useCart } from "@/lib/cart-context";
-
-import { generateOrderId } from "@/lib/upi";
 
 
 
@@ -92,8 +89,9 @@ export default function CheckoutPageContent() {
 
     const form = new FormData(e.currentTarget);
 
+    let orderId = "";
     try {
-      await fetch("/api/orders", {
+      const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -104,22 +102,26 @@ export default function CheckoutPageContent() {
           items,
           subtotal,
           currency,
+          paymentMethod: "upi",
         }),
       });
+      if (res.ok) {
+        const data = await res.json();
+        orderId = data.orderId;
+      }
     } catch {
-      // Continue to payment even if order logging fails
+      // handled below
     }
 
-    const orderId = generateOrderId();
+    if (!orderId) {
+      alert("Could not create order. Please try again.");
+      return;
+    }
 
     const params = new URLSearchParams({
-
       amount: subtotal.toFixed(2),
-
       orderId,
-
       method: "upi",
-
     });
 
     router.push(`/pay?${params.toString()}`);

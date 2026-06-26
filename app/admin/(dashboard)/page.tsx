@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatCartPrice } from "@/lib/cart";
+import { ORDER_STATUS } from "@/lib/order-status";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   try {
-    const [productCount, orderCount, pendingOrders, recentOrders] = await Promise.all([
+    const [productCount, orderCount, pendingPayments, recentOrders] = await Promise.all([
       prisma.product.count(),
       prisma.order.count(),
-      prisma.order.count({ where: { status: "pending" } }),
+      prisma.order.count({
+        where: { status: ORDER_STATUS.PAYMENT_SUBMITTED },
+      }),
       prisma.order.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
     ]);
 
@@ -22,7 +25,7 @@ export default async function AdminDashboardPage() {
         {[
           { label: "Products", value: productCount, href: "/admin/products" },
           { label: "Total Orders", value: orderCount, href: "/admin/orders" },
-          { label: "Pending Orders", value: pendingOrders, href: "/admin/orders" },
+          { label: "Awaiting Approval", value: pendingPayments, href: "/admin/orders" },
         ].map((stat) => (
           <Link
             key={stat.label}
@@ -51,7 +54,9 @@ export default async function AdminDashboardPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-medium">{formatCartPrice(order.subtotal, order.currency)}</p>
-                  <p className="text-xs capitalize text-text-muted">{order.status}</p>
+                  <Link href={`/admin/orders/${order.id}`} className="text-xs capitalize text-brown">
+                    {order.status.replace(/_/g, " ")} →
+                  </Link>
                 </div>
               </li>
             ))}

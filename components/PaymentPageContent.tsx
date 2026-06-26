@@ -63,9 +63,18 @@ function PaymentContent() {
     );
   }
 
-  function handlePaymentComplete() {
+  async function handlePaymentComplete() {
+    try {
+      await fetch(`/api/orders/${encodeURIComponent(orderId)}/complete`, {
+        method: "POST",
+      });
+    } catch {
+      // still redirect — admin can verify manually
+    }
     clearCart();
-    router.push(`/payment/success?orderId=${encodeURIComponent(orderId)}&amount=${amount.toFixed(2)}`);
+    router.push(
+      `/payment/success?orderId=${encodeURIComponent(orderId)}&amount=${amount.toFixed(2)}`
+    );
   }
 
   const upiUrl = buildUpiPaymentUrl(amount, orderId);

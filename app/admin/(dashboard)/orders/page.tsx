@@ -1,15 +1,22 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatCartPrice } from "@/lib/cart";
+import { formatOrderStatus, orderStatusBadgeClass, ORDER_STATUS } from "@/lib/order-status";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({ orderBy: { createdAt: "desc" } });
+  const awaitingApproval = orders.filter(
+    (o) => o.status === ORDER_STATUS.PAYMENT_SUBMITTED
+  ).length;
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-semibold text-brown-dark">Orders</h1>
-      <p className="mt-2 text-text-muted">{orders.length} orders total</p>
+      <h1 className="font-display text-3xl font-semibold text-brown-dark">Orders & Payments</h1>
+      <p className="mt-2 text-text-muted">
+        {orders.length} orders · {awaitingApproval} awaiting approval
+      </p>
 
       <div className="mt-8 overflow-hidden rounded-2xl border border-sand bg-white">
         {orders.length === 0 ? (
@@ -22,7 +29,8 @@ export default async function AdminOrdersPage() {
                 <th className="px-4 py-3 font-medium">Customer</th>
                 <th className="px-4 py-3 font-medium">Phone</th>
                 <th className="px-4 py-3 font-medium">Total</th>
-                <th className="px-4 py-3 font-medium">Status</th>
+                <th className="px-4 py-3 font-medium">Payment</th>
+                <th className="px-4 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sand">
@@ -39,7 +47,21 @@ export default async function AdminOrdersPage() {
                   <td className="px-4 py-3 font-medium">
                     {formatCartPrice(order.subtotal, order.currency)}
                   </td>
-                  <td className="px-4 py-3 capitalize">{order.status}</td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${orderStatusBadgeClass(order.status)}`}
+                    >
+                      {formatOrderStatus(order.status)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="font-medium text-brown transition hover:text-brown-dark"
+                    >
+                      View
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>

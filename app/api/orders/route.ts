@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         items: body.items,
         subtotal: body.subtotal,
         currency: body.currency ?? "INR",
-        status: "pending",
+        paymentMethod: body.paymentMethod ?? "upi",
       },
     });
 

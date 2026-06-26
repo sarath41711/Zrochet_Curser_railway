@@ -29,8 +29,8 @@ function SuccessContent() {
         Payment done successfully
       </h1>
       <p className="mt-4 leading-relaxed text-text-muted">
-        Thank you! Your payment request has been received. We&apos;ll confirm your order and reach
-        out shortly with delivery updates.
+        Thank you! Your payment has been submitted. We&apos;ll verify it and confirm your order
+        shortly. A receipt will be available once your order is approved.
       </p>
 
       {(orderId || Number.isFinite(amount)) && (
@@ -47,6 +47,14 @@ function SuccessContent() {
                 {formatCartPrice(amount, "INR")}
               </span>
             </p>
+          )}
+          {orderId && (
+            <a
+              href={`/api/orders/${encodeURIComponent(orderId)}/receipt`}
+              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brown transition hover:text-brown-dark"
+            >
+              Download payment receipt (PDF) →
+            </a>
           )}
         </div>
       )}

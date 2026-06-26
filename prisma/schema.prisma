@@ -54,14 +54,17 @@ model SiteSettings {
 }
 
 model Order {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String
-  address   String
-  items     Json
-  subtotal  Int
-  currency  String   @default("INR")
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phone         String
+  address       String
+  items         Json
+  subtotal      Int
+  currency      String    @default("INR")
+  status        String    @default("pending")
+  paymentMethod String?   @default("upi")
+  paidAt        DateTime?
+  approvedAt    DateTime?
+  createdAt     DateTime  @default(now())
 }
