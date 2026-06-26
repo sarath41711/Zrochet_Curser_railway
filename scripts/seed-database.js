@@ -3,6 +3,8 @@
  * Usage: npm run db:seed
  */
 
+require("./resolve-db-url").resolveDatabaseUrl();
+
 const fs = require("fs");
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
@@ -21,12 +23,8 @@ const COLLECTION_PATTERNS = {
 };
 
 async function main() {
-  const dbUrl = (process.env.DATABASE_URL || "").trim();
-  if (
-    !dbUrl ||
-    dbUrl.includes("PASSWORD@HOST") ||
-    dbUrl.includes("postgres.railway.internal")
-  ) {
+  const dbUrl = require("./resolve-db-url").getDatabaseUrl();
+  if (!dbUrl) {
     console.error(
       "DATABASE_URL is not set or invalid. Use Railway PUBLIC URL in .env.local for local dev."
     );

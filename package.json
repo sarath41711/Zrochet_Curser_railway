@@ -14,7 +14,7 @@
     "db:seed": "node scripts/seed-database.js",
     "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "setup:local": "prisma generate && prisma migrate deploy && npm run db:seed"
+    "setup:local": "node scripts/resolve-db-url.js && prisma generate && prisma migrate deploy && npm run db:seed"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

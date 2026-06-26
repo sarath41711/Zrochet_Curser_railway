@@ -11,11 +11,12 @@ function run(cmd) {
 }
 
 function isDatabaseConfigured() {
-  const url = (process.env.DATABASE_URL || "").trim();
-  if (!url) return false;
-  if (url.includes("PASSWORD@HOST") || url.includes("@HOST:")) return false;
-  if (url.includes("postgres.railway.internal")) return false;
-  return url.startsWith("postgresql://") || url.startsWith("postgres://");
+  try {
+    return Boolean(require("./resolve-db-url").getDatabaseUrl());
+  } catch {
+    const url = (process.env.DATABASE_URL || "").trim();
+    return Boolean(url) && !url.includes("postgres.railway.internal");
+  }
 }
 
 if (isDatabaseConfigured()) {

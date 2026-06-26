@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { isDatabaseConfigured } from "@/lib/env";
+import { applyDatabaseUrlEnv, isDatabaseConfigured } from "@/lib/env";
+
+applyDatabaseUrlEnv();
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
