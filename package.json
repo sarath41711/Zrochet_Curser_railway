@@ -5,7 +5,7 @@
     "dev": "prisma generate && npm run generate:catalog && next dev",
     "dev:clean": "node scripts/clean-next.js && npm run dev",
     "build": "prisma generate && npm run generate:catalog && next build",
-    "start": "next start",
+    "start": "node scripts/start-production.js",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "generate:catalog": "node scripts/generate-catalog.js",

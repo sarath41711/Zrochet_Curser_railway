@@ -1,17 +1,31 @@
-import { createHmac } from "crypto";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const ADMIN_COOKIE = "zrochet_admin";
 
-function getExpectedToken(): string {
+async function getExpectedToken(): Promise<string> {
   const secret = process.env.ADMIN_PASSWORD || "zrochet-admin-change-me";
-  return createHmac("sha256", secret).update("zrochet-admin-session").digest("hex");
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode("zrochet-admin-session")
+  );
+  return Array.from(new Uint8Array(signature))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const expected = getExpectedToken();
+  const expected = await getExpectedToken();
   const token = request.cookies.get(ADMIN_COOKIE)?.value;
 
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {

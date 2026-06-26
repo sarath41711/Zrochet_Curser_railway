@@ -65,11 +65,12 @@ This creates:
 2. Generates catalog JSON (fallback)
 3. Builds Next.js
 
-**Pre-deploy** (via `railway.toml`) runs when the database is reachable:
+**Start** (via `scripts/start-production.js`) runs when the database is reachable:
 1. `npx prisma migrate deploy` — creates tables
 2. `npm run db:seed` — imports products (skips if DB already has products)
+3. `next start` — serves the site
 
-You can also run `npm run db:seed` manually in Railway **Console**.
+Migrate/seed are skipped locally when `DATABASE_URL` is not set.
 
 ## Security notes
 
